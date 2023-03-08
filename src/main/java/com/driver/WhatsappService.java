@@ -17,11 +17,7 @@ public class WhatsappService {
         return whatsappRepository.createMessage(content);
     }
     public int sendMessage(Message message, User user, Group group) throws Exception{
-        try {
-            return whatsappRepository.sendMessage(message,user,group);
-        }catch (Exception e){
-            throw new Exception();
-        }
+        return whatsappRepository.sendMessage(message,user,group);
     }
     public String changeAdmin(User approver, User user, Group group) throws Exception{
         return "";
