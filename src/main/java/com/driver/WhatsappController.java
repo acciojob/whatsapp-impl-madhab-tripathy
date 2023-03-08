@@ -32,7 +32,7 @@ public class WhatsappController {
         try{
             return whatsappService.createUser(name, mobile);
         }catch (Exception e){
-            throw new Exception();
+            return e.getMessage();
         }
     }
 

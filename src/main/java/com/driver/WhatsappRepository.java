@@ -38,9 +38,8 @@ public class WhatsappRepository {
         if(userHashMap.containsKey(mobile)){
             throw new Exception("User already exists");
         }
-        else {
-            userHashMap.put(mobile,new User(name,mobile));
-        }
+        userHashMap.put(mobile,new User(name,mobile));
+
         return "SUCCESS";
     }
     // 2. Create group
