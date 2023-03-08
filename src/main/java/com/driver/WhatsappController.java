@@ -69,15 +69,14 @@ public class WhatsappController {
         }
 
     }
-//    @PutMapping("/change-admin")
-//    public String changeAdmin(User approver, User user, Group group) throws Exception{
-//        //Throw "Group does not exist" if the mentioned group does not exist
-//        //Throw "Approver does not have rights" if the approver is not the current admin of the group
-//        //Throw "User is not a participant" if the user is not a part of the group
-//        //Change the admin of the group to "user" and return "SUCCESS". Note that at one time there is only one admin and the admin rights are transferred from approver to user.
-//
-//        return whatsappService.changeAdmin(approver, user, group);
-//    }
+    @PutMapping("/change-admin")
+    public String changeAdmin(User approver, User user, Group group) throws Exception{
+        //Throw "Group does not exist" if the mentioned group does not exist
+        //Throw "Approver does not have rights" if the approver is not the current admin of the group
+        //Throw "User is not a participant" if the user is not a part of the group
+        //Change the admin of the group to "user" and return "SUCCESS". Note that at one time there is only one admin and the admin rights are transferred from approver to user.
+        return whatsappService.changeAdmin(approver, user, group);
+    }
 //
 //    @DeleteMapping("/remove-user")
 //    public int removeUser(User user) throws Exception{

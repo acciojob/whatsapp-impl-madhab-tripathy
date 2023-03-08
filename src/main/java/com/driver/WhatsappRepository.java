@@ -87,4 +87,7 @@ public class WhatsappRepository {
         senderMap.put(message,sender);
         return messageList.size();
     }
+    public String changeAdmin(User approver, User user, Group group) throws Exception{
+        return "";
+    }
 }

@@ -28,4 +28,7 @@ public class WhatsappService {
             throw new Exception();
         }
     }
+    public String changeAdmin(User approver, User user, Group group) throws Exception{
+        return "";
+    }
 }
