@@ -64,7 +64,6 @@ public class WhatsappRepository {
     public int createMessage(String content){
         this.messageId += 1;
         Message message = new Message(this.messageId,content);
-//        message.setId(this.messageId);
         return this.messageId;
     }
     public int sendMessage(Message message, User sender, Group group) throws Exception {
@@ -75,7 +74,7 @@ public class WhatsappRepository {
         // 2. Throw "You are not allowed to send message" if the sender is not a member of the group
         List<User> userList = groupUserMap.get(group);
         for(User user : userList){
-            if(sender != user){
+            if(!user.equals(sender)){
                 throw new Exception("You are not allowed to send message");
             }
         }
