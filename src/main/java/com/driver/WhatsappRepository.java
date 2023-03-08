@@ -64,8 +64,8 @@ public class WhatsappRepository {
     }
     public int createMessage(String content){
         this.messageId += 1;
-        Message message = new Message(content);
-        message.setId(this.messageId);
+        Message message = new Message(this.messageId,content);
+//        message.setId(this.messageId);
         return this.messageId;
     }
     public int sendMessage(Message message, User sender, Group group) throws Exception {
