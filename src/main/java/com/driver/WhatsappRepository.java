@@ -56,8 +56,9 @@ public class WhatsappRepository {
         else if(users.size() > 2){
             this.customGroupCount += 1;
             String groupName = "Group "+this.customGroupCount;
-            group = new Group(groupName,users.size());
+            group = new Group(groupName,users.size()); // group name with number of participant
         }
+        adminMap.put(group,users.get(0)); // store group admin
         groupUserMap.put(group,users);
         return group;
     }
@@ -85,7 +86,23 @@ public class WhatsappRepository {
         senderMap.put(message,sender);
         return messageList.size();
     }
-    public String changeAdmin(User approver, User user, Group group) throws Exception{
-        return "";
+    public void changeAdmin(User approver, User user, Group group) throws Exception{
+        //Throw "Group does not exist" if the mentioned group does not exist
+        if(!groupUserMap.containsKey(group)){
+            throw new Exception("Group does not exist");
+        }
+        //Throw "Approver does not have rights" if the approver is not the current admin of the group
+        User admin = adminMap.get(group);
+        if(!approver.equals(admin)){
+            throw new Exception("Approver does not have rights");
+        }
+        //Throw "User is not a participant" if the user is not a part of the group
+        List<User> participant = groupUserMap.get(group);
+        if(!participant.contains(user)){
+            throw new Exception("User is not a participant");
+        }
+        //Change the admin of the group to "user" and return "SUCCESS". Note that at one time there is only one admin
+        // and the admin rights are transferred from approver to user.
+        adminMap.put(group,user);
     }
 }

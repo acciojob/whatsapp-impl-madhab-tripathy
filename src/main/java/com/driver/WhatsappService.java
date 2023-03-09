@@ -19,7 +19,7 @@ public class WhatsappService {
     public int sendMessage(Message message, User user, Group group) throws Exception{
         return whatsappRepository.sendMessage(message,user,group);
     }
-    public String changeAdmin(User approver, User user, Group group) throws Exception{
-        return "";
+    public void changeAdmin(User approver, User user, Group group) throws Exception{
+        whatsappRepository.changeAdmin(approver,user,group);
     }
 }
