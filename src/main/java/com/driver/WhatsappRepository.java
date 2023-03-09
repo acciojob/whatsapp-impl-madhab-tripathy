@@ -120,7 +120,8 @@ public class WhatsappRepository {
         // and update relevant attributes accordingly.
         Group userInGroup = null;
         int afterRemoveUsersInGroup = 0;
-        int messageCountInGroup = 0;
+        int messageCountInCurrentGroup = 0;
+        int messageCountAllGroups = 0;
         boolean isUserPresentInGroup = false;
         // update number of users in group
         for (Group group : groupUserMap.keySet()){
@@ -143,11 +144,36 @@ public class WhatsappRepository {
                     messages.remove(message); // remove message from current messages list
                     groupMessageMap.put(userInGroup,messages);
                     senderMap.remove(message);
-                    messageCountInGroup = messages.size();
+                    messageCountInCurrentGroup = messages.size();
                 }
             }
         }
-        // the updated number of overall messages
-        return afterRemoveUsersInGroup + messageCountInGroup;
+        // the updated number of overall messages across all groups
+        for(List<Message> messages : groupMessageMap.values()){
+            messageCountAllGroups += messages.size();
+        }
+        return afterRemoveUsersInGroup + messageCountInCurrentGroup + messageCountAllGroups;
+    }
+    public String findMessage(Date start, Date end, int K) throws Exception{
+        //This is a bonus problem and does not contains any marks
+        // Find the Kth latest message between start and end (excluding start and end)
+        int countMessage = 0;
+        String kthMessage = "";
+        for (List<Message> messages : groupMessageMap.values()){
+            for(Message message : messages){
+                Date dt = message.getTimestamp();
+                if(start.compareTo(dt) * dt.compareTo(end) > 0){
+                    countMessage += 1;
+                    if(countMessage == K){
+                        kthMessage = message.getContent();
+                    }
+                }
+            }
+        }
+        // If the number of messages between given time is less than K, throw "K is greater than the number of messages" exception
+        if(countMessage < K){
+            throw new Exception("K is greater than the number of messages");
+        }
+        return kthMessage;
     }
 }
