@@ -16,4 +16,8 @@ public class Group {
     public int getNumberOfParticipants() {
         return numberOfParticipants;
     }
+
+    public void setNumberOfParticipants(int numberOfParticipants) {
+        this.numberOfParticipants = numberOfParticipants;
+    }
 }

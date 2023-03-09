@@ -39,7 +39,6 @@ public class WhatsappRepository {
             throw new Exception("User already exists");
         }
         userHashMap.put(mobile,new User(name,mobile));
-
         return "SUCCESS";
     }
     // 2. Create group
@@ -47,8 +46,7 @@ public class WhatsappRepository {
         // 1. If there are only 2 users, the group is a personal chat and the group name should be kept as the name of the second user(other than admin)
         Group group = null;
         if(users.size() == 2){
-            int last_index = users.size()-1;
-            String groupName = users.get(last_index).getName();
+            String groupName = users.get(1).getName(); // get last user in the list
             group = new Group(groupName,users.size());
         }
         // 2. If there are 2+ users, the name of group should be "Group count".
@@ -102,5 +100,54 @@ public class WhatsappRepository {
         //Change the admin of the group to "user" and return "SUCCESS". Note that at one time there is only one admin
         // and the admin rights are transferred from approver to user.
         adminMap.put(group,user);
+    }
+    public int removeUser(User user) throws Exception{
+        // This is a bonus problem and does not contains any marks
+        // A user belongs to exactly one group
+        // If user is not found in any group, throw "User not found" exception
+        for(List<User> list : groupUserMap.values()){
+            if(!list.contains(user)){
+                throw new Exception("User not found");
+            }
+        }
+        // If user is found in a group and it is the admin, throw "Cannot remove admin" exception
+        for (User admin : adminMap.values()){
+            if(user.equals(admin)){
+                throw new Exception("Cannot remove admin");
+            }
+        }
+        // If user is not the admin, remove the user from the group, remove all its messages from all the databases,
+        // and update relevant attributes accordingly.
+        Group userInGroup = null;
+        int afterRemoveUsersInGroup = 0;
+        int messageCountInGroup = 0;
+        boolean isUserPresentInGroup = false;
+        // update number of users in group
+        for (Group group : groupUserMap.keySet()){
+            List<User> userList = groupUserMap.get(group);
+            if(userList.contains(user)){
+                userInGroup = group;
+                userList.remove(user);
+                group.setNumberOfParticipants(userList.size()-1);
+                groupUserMap.put(group,userList);
+                afterRemoveUsersInGroup = group.getNumberOfParticipants();
+                isUserPresentInGroup = true;
+            }
+        }
+        //  updated number of messages in group
+        if(isUserPresentInGroup){
+            List<Message> messages = groupMessageMap.get(userInGroup);
+            for (Message message : senderMap.keySet()){
+                User currentUser = senderMap.get(message);
+                if(currentUser.equals(user)){
+                    messages.remove(message); // remove message from current messages list
+                    groupMessageMap.put(userInGroup,messages);
+                    senderMap.remove(message);
+                    messageCountInGroup = messages.size();
+                }
+            }
+        }
+        // the updated number of overall messages
+        return afterRemoveUsersInGroup + messageCountInGroup;
     }
 }
