@@ -74,10 +74,8 @@ public class WhatsappRepository {
         }
         // 2. Throw "You are not allowed to send message" if the sender is not a member of the group
         List<User> userList = groupUserMap.get(group);
-        for(User user : userList){
-            if(!user.equals(sender)){
-                throw new Exception("You are not allowed to send message");
-            }
+        if(!userList.contains(sender)){
+            throw new Exception("You are not allowed to send message");
         }
         // 3. Send message, If the message is sent successfully, return the final number of messages in that group.
         List<Message> messageList = groupMessageMap.getOrDefault(group,new ArrayList<>());
